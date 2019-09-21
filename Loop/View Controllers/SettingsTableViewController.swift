@@ -54,6 +54,7 @@ final class SettingsTableViewController: UITableViewController {
     fileprivate enum LoopRow: Int, CaseCountable {
         case dosing = 0
         case diagnostic
+        case estimation
     }
 
     fileprivate enum PumpRow: Int, CaseCountable {
@@ -176,6 +177,14 @@ final class SettingsTableViewController: UITableViewController {
                 cell.detailTextLabel?.text = nil
                 cell.accessoryType = .disclosureIndicator
 
+                return cell
+            case .estimation:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                
+                cell.textLabel?.text = NSLocalizedString("Settings Review Report", comment: "The title text for the parameter estimation report cell")
+                cell.detailTextLabel?.text = nil
+                cell.accessoryType = .disclosureIndicator
+                
                 return cell
             }
         case .pump:
@@ -567,6 +576,11 @@ final class SettingsTableViewController: UITableViewController {
                 let vc = CommandResponseViewController.generateDiagnosticReport(deviceManager: dataManager)
                 vc.title = sender?.textLabel?.text
 
+                show(vc, sender: sender)
+            case .estimation:
+                let vc = CommandResponseViewController.generateParameterEstimationReport(deviceManager: dataManager)
+                vc.title = sender?.textLabel?.text
+                
                 show(vc, sender: sender)
             case .dosing:
                 break
